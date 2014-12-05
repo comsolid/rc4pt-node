@@ -1,3 +1,4 @@
+'use strict';
 
 var api = require('./popcorn/api')
     , com = require('serialport');

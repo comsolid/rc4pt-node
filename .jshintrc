@@ -1,6 +1,6 @@
 {
     "node": true,
-    "browser": true,
+    "browser": false,
     "esnext": true,
     "bitwise": true,
     "camelcase": true,
@@ -20,6 +20,6 @@
     "smarttabs": true,
     "laxcomma": true,
     "globals": {
-        
+
     }
 }
