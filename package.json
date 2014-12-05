@@ -1,0 +1,31 @@
+{
+  "name": "rc4pt",
+  "version": "0.0.0",
+  "description": "Remote Control for PopcornTime",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ir",
+    "arduino",
+    "popcorntime",
+    "remote",
+    "control"
+  ],
+  "author": "Átila Camurça <camurca.home@gmail.com>",
+  "contributors": [
+    {
+      "name": "Samir Costa",
+      "email": "samirfor@gmail.com"
+    }
+  ],
+  "license": "GPLv3",
+  "dependencies": {
+    "btoa": "^1.1.2",
+    "djax": "^1.0.1",
+    "request": "^2.49.0",
+    "serialport": "^1.4.6",
+    "xhr2": "^0.1.0"
+  }
+}
