@@ -69,6 +69,9 @@ Api.prototype.parseAndSend = function(value) {
                     case 'player':
                         self.handlePlayer(cmd);
                         break;
+                    case 'shows-container-contain':
+                        self.handleShows(cmd);
+                        break;
                 }
             } else {
                 console.log(error);
@@ -120,6 +123,34 @@ Api.prototype.handlePlayer = function(cmd) {
             break;
         case 'down':
             this.send('back');
+            break;
+    }
+};
+
+Api.prototype.handleShows = function (cmd) {
+    switch (cmd) {
+        case 'up':
+        case 'volume-up':
+            this.send('up');
+            break;
+        case 'down':
+        case 'volume-down':
+            this.send('down');
+            break;
+        case 'enter':
+        case 'toggleplaying':
+            this.send('enter');
+            break;
+        case 'left':
+        case 'previous':
+            this.send('previousseason');
+            break;
+        case 'right':
+        case 'next':
+            this.send('nextseason');
+            break;
+        case 'showfavourites':
+            this.send('showfavourites');
             break;
     }
 };
