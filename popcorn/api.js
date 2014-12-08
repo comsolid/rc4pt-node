@@ -13,6 +13,7 @@ var Api = function(config) {
     this.port = config.port;
     this.username = config.username;
     this.password = config.password;
+    this.currentPlayer = 0;
 };
 
 Api.prototype.getURL = function() {
@@ -72,6 +73,9 @@ Api.prototype.parseAndSend = function(value) {
                     case 'shows-container-contain':
                         self.handleShows(cmd);
                         break;
+                    case 'movie-detail':
+                        self.handleMovieDetail(cmd);
+                        break;
                 }
             } else {
                 console.log(error);
@@ -84,30 +88,30 @@ Api.prototype.parseAndSend = function(value) {
 
 Api.prototype.handleMainBrowser = function(cmd) {
     switch (cmd) {
-        case 'left':
+        case 'btn-4':
         case 'previous':
             this.send('left');
             break;
-        case 'right':
+        case 'btn-6':
         case 'next':
             this.send('right');
             break;
-        case 'up':
+        case 'btn-2':
         case 'volume-up':
             this.send('up');
             break;
-        case 'down':
+        case 'btn-8':
         case 'volume-down':
             this.send('down');
             break;
-        case 'enter':
-        case 'toggleplaying':
+        case 'btn-5':
+        case 'play-pause':
             this.send('enter');
             break;
-        case 'showfavourites':
+        case 'btn-0':
             this.send('showfavourites');
             break;
-        case 'next-tab':
+        case 'up':
             this.send('toggletab');
             break;
     }
@@ -115,10 +119,10 @@ Api.prototype.handleMainBrowser = function(cmd) {
 
 Api.prototype.handlePlayer = function(cmd) {
     switch (cmd) {
-        case 'toggleplaying':
+        case 'play-pause':
             this.send('toggleplaying');
             break;
-        case 'togglefullscreen':
+        case 'func-stop':
             this.send('togglefullscreen');
             break;
         case 'down':
@@ -129,30 +133,71 @@ Api.prototype.handlePlayer = function(cmd) {
 
 Api.prototype.handleShows = function (cmd) {
     switch (cmd) {
-        case 'up':
+        case 'btn-2':
         case 'volume-up':
             this.send('up');
             break;
-        case 'down':
+        case 'btn-8':
         case 'volume-down':
             this.send('down');
             break;
-        case 'enter':
-        case 'toggleplaying':
+        case 'btn-5':
+        case 'play-pause':
             this.send('enter');
             break;
-        case 'left':
+        case 'btn-4':
         case 'previous':
             this.send('previousseason');
             break;
-        case 'right':
+        case 'btn-6':
         case 'next':
             this.send('nextseason');
             break;
-        case 'showfavourites':
+        case 'btn-0':
             this.send('showfavourites');
             break;
+        case 'btn-7':
+            this.send('togglequality');
+            break;
+        case 'btn-9':
+            this.changePlayer();
+            break;
     }
+};
+
+Api.prototype.handleMovieDetail = function (cmd) {
+    switch (cmd) {
+        case 'down':
+            this.send('back');
+            break;
+        case 'btn-7':
+            this.send('togglequality');
+            break;
+        case 'play-pause':
+            this.send('enter');
+            break;
+        case 'btn-1':
+            this.send('watchtrailer');
+            break;
+        case 'btn-9':
+            this.changePlayer();
+            break;
+    }
+};
+
+Api.prototype.changePlayer = function () {
+    var self = this;
+    this.send('getplayers', [], function (error, response, data) {
+        var players = data.result.players;
+        var len = players.length;
+        
+        self.currentPlayer++;
+        if (self.currentPlayer === len) {
+            self.currentPlayer = 0;
+        }
+        
+        self.send('setplayer', [players[self.currentPlayer].id]);
+    });
 };
 
 var config = require('./config');
