@@ -58,4 +58,8 @@ All dependencies will be installed with the `npm install` command, don't worry.
 
 ## Demo
 
-Check the demo in this [Video](https://www.youtube.com/watch?v=XdGIXM8NkCI).
+Check it out the demo in this [Video](https://www.youtube.com/watch?v=XdGIXM8NkCI).
+
+## Presentation
+
+Check it out this [presentation](http://comsolid.github.io/arduino-javascript-slides/) (in Brazilian Portuguese)
