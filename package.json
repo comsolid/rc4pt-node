@@ -2,9 +2,12 @@
   "name": "rc4pt",
   "version": "0.0.0",
   "description": "Remote Control for PopcornTime",
+  "repository": "comsolid/rc4pt-node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js | ./node_modules/bunyan/bin/bunyan",
+    "monitor": "nodemon index.js | ./node_modules/bunyan/bin/bunyan"
   },
   "keywords": [
     "ir",
@@ -20,10 +23,12 @@
       "email": "samirfor@gmail.com"
     }
   ],
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "btoa": "^1.1.2",
+    "bunyan": "^1.4.0",
     "djax": "^1.0.1",
+    "inquirer": "^0.8.5",
     "request": "^2.49.0",
     "serialport": "^1.4.6",
     "xhr2": "^0.1.0"

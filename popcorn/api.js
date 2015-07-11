@@ -5,8 +5,21 @@ var btoa = require('btoa'),
 
 request.debug = false;
 
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({name: 'rc4pt-node'});
+
 // use when you want a empty callback
 var noop = function() {};
+
+function getCurrentView(data) {
+    // Check if the client is an old version of popcorntime (pre 0.3.4).
+    if (typeof(data.result.popcornVersion) === 'undefined') {
+        return data.result[0][data.result[0].length - 1];
+    } else {
+        // The popcorntime client is version 0.3.4 or higher.
+        return data.result.viewstack[data.result.viewstack.length - 1];
+    }
+}
 
 var Api = function(config) {
     this.host = config.host;
@@ -36,10 +49,9 @@ Api.prototype.send = function(method, params, callback) {
             id: 10,
             method: method,
             jsonrpc: '2.0',
-            remote: 'PTR-0.3.5-3'
+            remote: 'PTR-0.3.8-0'
         }
     };
-
     request(options, callback);
 };
 
@@ -48,21 +60,14 @@ Api.prototype.parseAndSend = function(value) {
         var aux = value.split(':');
         var cmd = aux[1];
         var self = this;
+        
+        log.info('Key pressed: %s', cmd);
 
         // verifica qual a tela em que o usuário está, e o controle
         // se adapta de acordo com a visão
         this.send('getviewstack', [], function(error, response, data) {
             if (!error && response.statusCode === 200) {
-                var currentView;
-                // Check if the client is an old version of popcorntime (pre 0.3.4).
-                if (typeof(data.result.popcornVersion) === 'undefined') {
-                    currentView = data.result[0][data.result[0].length - 1];
-                }
-                // The popcorntime client is version 0.3.4 or higher.
-                else {
-                    currentView = data.result.viewstack[data.result.viewstack.length - 1];
-                }
-
+                var currentView = getCurrentView(data);
                 switch (currentView) {
                     case 'main-browser':
                         self.handleMainBrowser(cmd);
@@ -78,11 +83,11 @@ Api.prototype.parseAndSend = function(value) {
                         break;
                 }
             } else {
-                console.log(error);
+                log.error(error);
             }
         });
     } else {
-        console.log('ignored value:', value);
+        log.warn('ignored value: %s', value);
     }
 };
 
@@ -113,6 +118,9 @@ Api.prototype.handleMainBrowser = function(cmd) {
             break;
         case 'up':
             this.send('toggletab');
+            break;
+        case 'btn-3':
+            this.send('togglefavourite');
             break;
     }
 };
@@ -190,13 +198,15 @@ Api.prototype.changePlayer = function () {
     this.send('getplayers', [], function (error, response, data) {
         var players = data.result.players;
         var len = players.length;
-        
+
         self.currentPlayer++;
         if (self.currentPlayer === len) {
-            self.currentPlayer = 0;
+            self.currentPlayer = 0; // reset currentPlayer if reaches the end
         }
-        
-        self.send('setplayer', [players[self.currentPlayer].id]);
+
+        var player = players[self.currentPlayer].id;
+        log.info('setting player to %s', player);
+        self.send('setplayer', [player]);
     });
 };
 
