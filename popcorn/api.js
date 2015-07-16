@@ -1,7 +1,8 @@
 'use strict';
 
-var btoa = require('btoa'),
-    request = require('request');
+var btoa = require('btoa')
+    , request = require('request')
+    , vlc = require('vlc-api')();
 
 request.debug = false;
 
@@ -52,6 +53,7 @@ Api.prototype.send = function(method, params, callback) {
             remote: 'PTR-0.3.8-0'
         }
     };
+
     request(options, callback);
 };
 

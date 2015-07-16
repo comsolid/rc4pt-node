@@ -31,6 +31,7 @@
     "inquirer": "^0.8.5",
     "request": "^2.49.0",
     "serialport": "^1.4.6",
+    "vlc-api": "0.0.0",
     "xhr2": "^0.1.0"
   }
 }

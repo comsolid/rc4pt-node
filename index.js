@@ -67,6 +67,7 @@ function main(port) {
                 log.warn('Error while connecting. You have to open Popcorntime manually.');
             }
         }
+    }
 
         api.send('ping', [], callback);
     });
